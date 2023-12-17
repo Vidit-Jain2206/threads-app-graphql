@@ -1,6 +1,6 @@
 import { prismaclient } from "../lib/db";
 import { compare, genSaltSync, hashSync } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 export interface CreateUserPayload {
   firstName: string;
@@ -44,7 +44,7 @@ class UserService {
         firstName: user.firstName,
         lastName: user.lastName || undefined,
         email: user.email,
-        password: user.password,
+        id: user.id,
       });
       return token;
     } else {
@@ -52,8 +52,12 @@ class UserService {
     }
   }
 
-  private static createJWTToken(payload: CreateUserPayload) {
+  public static createJWTToken(payload: any) {
     return sign(payload, "Threads_clone", { expiresIn: "1h" });
+  }
+
+  public static decodeJWTToken(token: string) {
+    return verify(token, "Threads_clone");
   }
 }
 

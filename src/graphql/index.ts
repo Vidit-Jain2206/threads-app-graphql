@@ -3,6 +3,7 @@ import { User } from "./user";
 export async function createGrpahqlServer() {
   const server = new ApolloServer({
     typeDefs: `
+        ${User.typeDefs}
         type Query{
             ${User.queries}
         }
